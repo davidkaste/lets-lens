@@ -143,7 +143,7 @@ modify ::
   -> a
   -> a
 modify (Lens s g) f a =
-  s a (f (g a))
+  (s a) $ f (g a)
 
 -- | An alias for @modify@.
 (%~) ::
@@ -172,8 +172,9 @@ infixr 4 %~
   -> b
   -> a
   -> a
-(.~) =
-  error "todo: (.~)"
+-- (.~) (Lens s _) st bt = s bt st
+-- (.~) (Lens s _) st bt = (flip s) st bt
+(.~) (Lens s _) = flip s
 
 infixl 5 .~
 
@@ -193,8 +194,8 @@ fmodify ::
   -> (b -> f b)
   -> a
   -> f a
-fmodify =
-  error "todo: fmodify"
+fmodify (Lens s g) f a =
+  fmap (s a) $ f (g a)
 
 -- |
 --
@@ -209,8 +210,8 @@ fmodify =
   -> f b
   -> a
   -> f a
-(|=) =
-  error "todo: (|=)"
+(|=) l fb =
+  fmodify l (const fb)
 
 infixl 5 |=
 
