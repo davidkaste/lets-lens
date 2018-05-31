@@ -335,7 +335,7 @@ infixr 9 |.
 identity ::
   Lens a a
 identity =
-  error "todo: identity"
+  Lens (flip const) (id)
 
 -- |
 --
@@ -345,11 +345,12 @@ identity =
 -- >>> set (product fstL sndL) (("abc", 3), (4, "def")) ("ghi", "jkl")
 -- (("ghi",3),(4,"jkl"))
 product ::
-  Lens a b
-  -> Lens c d
-  -> Lens (a, c) (b, d)
-product =
-  error "todo: product"
+  Lens a b    -- (a -> b -> a) (a -> b)
+  -> Lens c d -- (c -> d -> c) (c -> d)
+  -> Lens (a, c) (b, d) -- ((a, c) -> (b, d) -> (a, c)) ((a, c) -> (b, d))
+product (Lens s1 g1) (Lens s2 g2) =
+  Lens (\(x, y) (u, v) -> (s1 x u, s2 y v))
+       (\(x, y) -> (g1 x, g2 y))
 
 -- | An alias for @product@.
 (***) ::
