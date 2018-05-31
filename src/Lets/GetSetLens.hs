@@ -268,8 +268,11 @@ mapL ::
   Ord k =>
   k
   -> Lens (Map k v) (Maybe v)
-mapL =
-  error "todo: mapL"
+mapL key =
+  Lens setter getter
+    where setter m Nothing = Map.delete key m
+          setter m (Just x) = Map.insert key x m
+          getter = Map.lookup key
 
 -- |
 --
