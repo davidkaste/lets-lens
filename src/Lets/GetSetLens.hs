@@ -269,10 +269,9 @@ mapL ::
   k
   -> Lens (Map k v) (Maybe v)
 mapL key =
-  Lens setter getter
+  Lens setter (Map.lookup key)
     where setter m Nothing = Map.delete key m
           setter m (Just x) = Map.insert key x m
-          getter = Map.lookup key
 
 -- |
 --
@@ -297,8 +296,10 @@ setL ::
   Ord k =>
   k
   -> Lens (Set k) Bool
-setL =
-  error "todo: setL"
+setL key =
+  Lens setter (Set.member key)
+    where setter st False = Set.delete key st
+          setter st True  = Set.insert key st
 
 -- |
 --
@@ -308,11 +309,11 @@ setL =
 -- >>> set (compose fstL sndL) ("abc", (7, "def")) 8
 -- ("abc",(8,"def"))
 compose ::
-  Lens b c
-  -> Lens a b
-  -> Lens a c
-compose =
-  error "todo: compose"
+     Lens b c -- (b -> c -> b) (b -> c)
+  -> Lens a b -- (a -> b -> a) (a -> b)
+  -> Lens a c -- (a -> c -> a) (a -> c)
+compose (Lens sa ga) (Lens sb gb) =
+  Lens (\x -> sb x . sa (gb x)) (ga . gb)
 
 -- | An alias for @compose@.
 (|.) ::
