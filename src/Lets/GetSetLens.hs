@@ -142,8 +142,8 @@ modify ::
   -> (b -> b)
   -> a
   -> a
-modify =
-  error "todo: modify"
+modify (Lens s g) f a =
+  s a (f (g a))
 
 -- | An alias for @modify@.
 (%~) ::
@@ -227,7 +227,7 @@ infixl 5 |=
 fstL ::
   Lens (x, y) x
 fstL =
-  error "todo: fstL"
+  Lens (\(_, y) x' -> (x', y)) (\(x, _) -> x)
 
 -- |
 --
@@ -242,7 +242,7 @@ fstL =
 sndL ::
   Lens (x, y) y
 sndL =
-  error "todo: sndL"
+  Lens (\(x, _) y' -> (x, y')) (\(_, y) -> y)
 
 -- |
 --
