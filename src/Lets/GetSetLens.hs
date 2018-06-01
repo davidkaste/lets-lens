@@ -379,8 +379,13 @@ choice ::
   Lens a x
   -> Lens b x
   -> Lens (Either a b) x
-choice =
-  error "todo: choice"
+choice (Lens sl gl) (Lens sr gr) =
+  Lens setter getter
+    where setter (Right x) = Right . sr x
+          setter (Left x)  = Left . sl x
+          getter (Right x) = gr x
+          getter (Left x)  = gl x
+
 
 -- | An alias for @choice@.
 (|||) ::
@@ -468,7 +473,7 @@ getSuburb ::
   Person
   -> String
 getSuburb =
-  error "todo: getSuburb"
+  get (compose suburbL addressL)
 
 -- |
 --
