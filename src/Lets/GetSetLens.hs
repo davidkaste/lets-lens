@@ -487,7 +487,7 @@ setStreet ::
   -> String
   -> Person
 setStreet =
-  error "todo: setStreet"
+  set (compose streetL addressL)
 
 -- |
 --
