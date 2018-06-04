@@ -499,8 +499,8 @@ setStreet =
 getAgeAndCountry ::
   (Person, Locality)
   -> (Int, String)
-getAgeAndCountry =
-  error "todo: getAgeAndCountry"
+getAgeAndCountry s1 =
+  get (product ageL countryL) s1
 
 -- |
 --
