@@ -552,4 +552,4 @@ modifyCityUppercase ::
   Person
   -> Person
 modifyCityUppercase =
-  modify (cityL |. localityL |. addressL) (map toUpper)
+  (cityL |. localityL |. addressL) %~ map toUpper
