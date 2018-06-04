@@ -473,7 +473,7 @@ getSuburb ::
   Person
   -> String
 getSuburb =
-  get (compose suburbL addressL)
+  get (suburbL |. addressL)
 
 -- |
 --
@@ -487,7 +487,7 @@ setStreet ::
   -> String
   -> Person
 setStreet =
-  set (compose streetL addressL)
+  set (streetL |. addressL)
 
 -- |
 --
@@ -500,7 +500,7 @@ getAgeAndCountry ::
   (Person, Locality)
   -> (Int, String)
 getAgeAndCountry =
-  get (product ageL countryL)
+  get (ageL *** countryL)
 
 -- |
 --
@@ -512,7 +512,7 @@ getAgeAndCountry =
 setCityAndLocality ::
   (Person, Address) -> (String, Locality) -> (Person, Address)
 setCityAndLocality =
-  error "todo: setCityAndLocality"
+  set (cityL |. localityL |. addressL *** localityL)
   
 -- |
 --
@@ -525,7 +525,7 @@ getSuburbOrCity ::
   Either Address Locality
   -> String
 getSuburbOrCity =
-  error "todo: getSuburbOrCity"
+  get (suburbL ||| cityL)
 
 -- |
 --
