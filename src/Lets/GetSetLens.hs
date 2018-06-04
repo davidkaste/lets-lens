@@ -539,7 +539,7 @@ setStreetOrState ::
   -> String
   -> Either Person Locality
 setStreetOrState =
-  error "todo: setStreetOrState"
+  set ((streetL |. addressL) ||| stateL)
 
 -- |
 --
